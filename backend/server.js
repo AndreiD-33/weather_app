@@ -3,20 +3,6 @@
  * ─────────────────────────────────────────────────────────────────────────
  * Serverul principal al aplicatiei Weather App.
  * Arhitectura: React (5173) → Express (5000) → OWM API + json-server (3000)
- *
- * Rute disponibile:
- *  GET  /api/weather?city=Iasi         — vremea dupa oras
- *  GET  /api/weather?lat=47.1&lon=27.6 — vremea dupa coordonate
- *  GET  /api/weather/air?lat=...&lon=  — calitatea aerului
- *  GET  /api/geocode?city=Iasi         — geocodare oras
- *  GET  /api/searches                  — istoricul cautarilor
- *  POST /api/searches                  — salveaza o cautare
- *  DELETE /api/searches/:id            — sterge o cautare
- *  GET  /api/favorites                 — orase favorite
- *  POST /api/favorites                 — adauga favorit
- *  DELETE /api/favorites/:id           — sterge favorit
- *
- * ─────────────────────────────────────────────────────────────────────────
  */
 
 // Incarca variabilele din .env inainte de orice altceva
@@ -35,7 +21,15 @@ const weatherService = require("./weatherService");
 // ─────────────────────────────────────────────────────────────────────────
 
 const app = express();
-app.use(cors());
+
+// Configurare CORS pentru a permite cereri din Vercel si din localhost 
+app.use(cors({
+  origin: [
+    "https://weather-app-frontend.vercel.app", // INLOCUIESTE ASTA CU LINK-UL TAU VERCEL REAL CAND IL AI!
+    "http://localhost:5173"
+  ]
+}));
+
 app.use(express.json());
 
 // Ruta statica pentru imagini (similar cu citate-autori)
@@ -43,7 +37,8 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 
 const API_KEY = process.env.OPENWEATHER_API_KEY;
 const JSON_SERVER_URL = process.env.JSON_SERVER_URL || "http://localhost:3000";
-const PORT = process.env.PORT || 5000;
+// Render setează process.env.PORT automat [cite: 35]
+const PORT = process.env.PORT || 5000; 
 
 // Verificam daca avem cheia API la pornire
 if (!API_KEY || API_KEY === "your_openweathermap_api_key_here") {
@@ -86,10 +81,6 @@ const favoriteSchema = Joi.object({
 // RUTE: Health check
 // ─────────────────────────────────────────────────────────────────────────
 
-/**
- * GET /
- * Ruta de test — confirma ca API-ul ruleaza
- */
 app.get("/", (req, res) => {
   res.json({
     message: "Weather App API functioneaza!",
@@ -106,19 +97,9 @@ app.get("/", (req, res) => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────
-// RUTE: Meteo — procesarea se face in weatherService.js (cerinta proiect)
+// RUTE: Meteo — procesarea se face in weatherService.js
 // ─────────────────────────────────────────────────────────────────────────
 
-/**
- * GET /api/weather
- * Preia vremea dupa oras (city=...) sau coordonate (lat=... lon=...)
- * Suporta ambele moduri conform cerintei proiectului.
- *
- * Query params:
- *   city  {string} — numele orasului
- *   lat   {number} — latitudine (alternativa la city)
- *   lon   {number} — longitudine (alternativa la city)
- */
 app.get("/api/weather", async (req, res) => {
   try {
     const { city, lat, lon } = req.query;
@@ -126,7 +107,6 @@ app.get("/api/weather", async (req, res) => {
     let latitude, longitude, cityName, countryCode;
 
     if (city) {
-      // Mod 1: cautare dupa oras — geocodare intai
       const { error } = cityQuerySchema.validate(req.query);
       if (error) {
         return res.status(400).json({ error: error.details[0].message });
@@ -138,7 +118,6 @@ app.get("/api/weather", async (req, res) => {
       cityName = geoData.name;
       countryCode = geoData.country;
     } else if (lat && lon) {
-      // Mod 2: cautare dupa coordonate
       const { error } = coordsQuerySchema.validate(req.query);
       if (error) {
         return res.status(400).json({ error: error.details[0].message });
@@ -154,7 +133,6 @@ app.get("/api/weather", async (req, res) => {
       });
     }
 
-    // Preia datele meteo complete prin weatherService (SEPARAT de afisare)
     const weatherData = await weatherService.fetchWeatherByCoords(
       latitude,
       longitude,
@@ -163,12 +141,10 @@ app.get("/api/weather", async (req, res) => {
       countryCode
     );
 
-    // Salveaza cautarea in json-server (istoricul cautarilor)
     try {
       const searchesResp = await fetch(`${JSON_SERVER_URL}/searches`);
       const searches = await searchesResp.json();
 
-      // Evita duplicate in ultimele 10 cautari
       const alreadySaved = searches
         .slice(-10)
         .some(
@@ -197,7 +173,6 @@ app.get("/api/weather", async (req, res) => {
         });
       }
     } catch (dbError) {
-      // Eroarea de salvare nu trebuie sa blocheze raspunsul meteo
       console.warn("Nu s-a putut salva cautarea in DB:", dbError.message);
     }
 
@@ -205,7 +180,6 @@ app.get("/api/weather", async (req, res) => {
   } catch (error) {
     console.error("Eroare weather:", error.message);
 
-    // Tratam diferit erorile de la OWM (401, 404, 429)
     if (error.response?.status === 401) {
       return res
         .status(401)
@@ -224,14 +198,6 @@ app.get("/api/weather", async (req, res) => {
   }
 });
 
-/**
- * GET /api/weather/air
- * Preia calitatea aerului pentru coordonatele date
- *
- * Query params:
- *   lat {number} — latitudine
- *   lon {number} — longitudine
- */
 app.get("/api/weather/air", async (req, res) => {
   try {
     const { error } = coordsQuerySchema.validate(req.query);
@@ -259,13 +225,6 @@ app.get("/api/weather/air", async (req, res) => {
   }
 });
 
-/**
- * GET /api/geocode
- * Geocodeaza un oras si returneaza coordonatele
- *
- * Query params:
- *   city {string} — numele orasului
- */
 app.get("/api/geocode", async (req, res) => {
   try {
     const { error } = cityQuerySchema.validate(req.query);
@@ -285,19 +244,14 @@ app.get("/api/geocode", async (req, res) => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────
-// RUTE: Istoricul cautarilor (json-server proxy — similar cu citate-autori)
+// RUTE: Istoricul cautarilor 
 // ─────────────────────────────────────────────────────────────────────────
 
-/**
- * GET /api/searches
- * Returneaza istoricul cautarilor (ultimele 20, sortate descrescator)
- */
 app.get("/api/searches", async (req, res) => {
   try {
     const response = await fetch(`${JSON_SERVER_URL}/searches`);
     const data = await response.json();
 
-    // Sorteaza descrescator dupa timestamp si limiteaza la 20
     const sorted = data
       .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
       .slice(0, 20);
@@ -309,10 +263,6 @@ app.get("/api/searches", async (req, res) => {
   }
 });
 
-/**
- * DELETE /api/searches/:id
- * Sterge o cautare din istoric
- */
 app.delete("/api/searches/:id", async (req, res) => {
   try {
     if (isNaN(req.params.id)) {
@@ -335,10 +285,6 @@ app.delete("/api/searches/:id", async (req, res) => {
   }
 });
 
-/**
- * DELETE /api/searches
- * Sterge tot istoricul cautarilor
- */
 app.delete("/api/searches", async (req, res) => {
   try {
     const response = await fetch(`${JSON_SERVER_URL}/searches`);
@@ -358,13 +304,9 @@ app.delete("/api/searches", async (req, res) => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────
-// RUTE: Orase favorite (json-server proxy)
+// RUTE: Orase favorite 
 // ─────────────────────────────────────────────────────────────────────────
 
-/**
- * GET /api/favorites
- * Returneaza lista oraselor favorite
- */
 app.get("/api/favorites", async (req, res) => {
   try {
     const response = await fetch(`${JSON_SERVER_URL}/favorites`);
@@ -376,13 +318,7 @@ app.get("/api/favorites", async (req, res) => {
   }
 });
 
-/**
- * POST /api/favorites
- * Adauga un oras la favorite
- * Body: { city, country, lat, lon }
- */
 app.post("/api/favorites", async (req, res) => {
-  // Validare Joi (la fel ca in lab 4 citate-autori)
   const { error } = favoriteSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
@@ -392,7 +328,6 @@ app.post("/api/favorites", async (req, res) => {
     const response = await fetch(`${JSON_SERVER_URL}/favorites`);
     const favorites = await response.json();
 
-    // Verificam daca orasul e deja la favorite
     const exists = favorites.some(
       (f) =>
         f.city.toLowerCase() === req.body.city.toLowerCase() &&
@@ -430,17 +365,12 @@ app.post("/api/favorites", async (req, res) => {
   }
 });
 
-/**
- * DELETE /api/favorites/:id
- * Sterge un oras din favorite
- */
 app.delete("/api/favorites/:id", async (req, res) => {
   try {
     if (isNaN(req.params.id)) {
       return res.status(400).json({ error: "ID invalid." });
     }
 
-    // Verificam daca exista
     const checkResp = await fetch(
       `${JSON_SERVER_URL}/favorites/${req.params.id}`
     );
@@ -466,13 +396,9 @@ app.delete("/api/favorites/:id", async (req, res) => {
 // ─────────────────────────────────────────────────────────────────────────
 
 app.listen(PORT, () => {
-  console.log(`\n🌤️  Weather App Server pornit!`);
-  console.log(`   → Express API: http://localhost:${PORT}`);
+  console.log(`\n🌤️  Weather App Server pornit pe portul ${PORT}`); // Modificat putin mesajul conform [cite: 36]
   console.log(`   → json-server: ${JSON_SERVER_URL}`);
   console.log(`   → Cheie OWM: ${API_KEY ? "✅ configurata" : "❌ LIPSA"}\n`);
 });
 
-// Verificam repornirea automata (similar cu citate-autori)
-console.log("Server restarted!");
-
-module.exports = app; // Export pentru testare Jest
+module.exports = app;

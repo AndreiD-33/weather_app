@@ -1,14 +1,15 @@
 /**
  * weatherApi.js — Stratul API al frontend-ului
  * ─────────────────────────────────────────────────────────────────────────
- * backend sunt centralizate intr-un singur fisier.
+ * Toate cererile catre backend sunt centralizate intr-un singur fisier.
  * Componentele importa functii de aici, fara a cunoaste detaliile HTTP.
-  * ─────────────────────────────────────────────────────────────────────────
+ * ─────────────────────────────────────────────────────────────────────────
  */
 
-// URL-ul de baza — cu proxy Vite activ, calea relativa e suficienta
-// React comunica cu Express (:5000), niciodata direct cu json-server (:3000)
-const BASE_URL = "/api";
+// URL-ul de baza dinamic folosind variabile de mediu Vite [cite: 58-61, 72]
+// În dezvoltare (local): va folosi valoarea din .env.local (ex: http://localhost:5000) [cite: 63-65]
+// În producție (Vercel): va folosi valoarea setata in dashboard-ul Vercel [cite: 156-160]
+const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
 
 // ─────────────────────────────────────────────────────────────────────────
 // METEO

@@ -4,11 +4,13 @@
   "description": "Aplicatie web pentru starea vremii - Proiect 11",
   "main": "backend/server.js",
   "scripts": {
-    "start": "node backend/server.js",
-    "dev": "nodemon backend/server.js",
-    "json-server": "json-server --watch db.json --port 3000",
+    "start": "concurrently \"json-server --watch db.json --port 3000\" \"node backend/server.js\"",
+    "dev": "concurrently \"json-server --watch db.json --port 3000\" \"nodemon backend/server.js\"",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "keywords": [
     "weather",
@@ -20,14 +22,15 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^1.15.0",
+    "concurrently": "^8.2.2",
     "cors": "^2.8.6",
     "dotenv": "^16.6.1",
     "express": "^4.22.1",
-    "joi": "^17.13.3"
+    "joi": "^17.13.3",
+    "json-server": "^0.17.4"
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "json-server": "^0.17.4",
     "nodemon": "^3.0.2",
     "supertest": "^6.3.4"
   }
