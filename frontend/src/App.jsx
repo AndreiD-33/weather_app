@@ -11,9 +11,9 @@
 import { BrowserRouter, Routes, Route, useLocation, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import Navbar from "./components/Navbar";
-import WeatherPage from "./pages/WeatherPage";
-import HistoryPage from "./pages/HistoryPage";
-import FavoritesPage from "./pages/FavoritesPage";
+import HistoryPage from './pages/Historypage';
+import FavoritesPage from './pages/Favoritespage';
+import WeatherPage from './pages/WeatherPage';
 
 /**
  * Wrapper care intercepteaza parametrul ?city= din URL
