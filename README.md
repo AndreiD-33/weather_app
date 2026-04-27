@@ -172,12 +172,7 @@ npm run dev
 | json-server  | http://localhost:3000    |
 
 ### URL-uri finale productie
-
-| Serviciu             | URL                                                          |
-|----------------------|--------------------------------------------------------------|
-| Frontend (Vercel)    | `https://weather-app.vercel.app`                            |
-| Backend API (Render) | `https://weather-app-backend.onrender.com`                  |
-| Test API             | `https://weather-app-backend.onrender.com/api/weather?city=Iasi` |
+  Frontend (Vercel)  https://weather-app-ywij.vercel.app/
 
 ---
 
