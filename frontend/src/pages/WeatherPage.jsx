@@ -14,10 +14,10 @@
 
 import { useState, useEffect } from "react";
 import SearchBar from "../components/SearchBar";
-import CurrentWeather from "../components/CurrentWeather";
-import HourlyForecast from "../components/HourlyForecast";
-import DailyForecast from "../components/DailyForecast";
-import LoadingSkeleton from "../components/LoadingSkeleton";
+import CurrentWeather from "../components/Currentweather";
+import HourlyForecast from "../components/Hourlyforecast";
+import DailyForecast from "../components/Dailyforecast";
+import LoadingSkeleton from "../components/Loadingskeleton";
 import { useWeather } from "../hooks/useWeather";
 import { addFavorite, getFavorites, deleteFavorite } from "../api/weatherApi";
 
