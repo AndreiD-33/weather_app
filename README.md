@@ -10,7 +10,6 @@
 - [Arhitectura](#arhitectura)
 - [Structura Proiect](#structura-proiect)
 - [Instalare si Pornire Locala](#instalare-si-pornire-locala)
-- [Deployment Render + Vercel](#deployment-render--vercel)
 - [Functionalitati](#functionalitati)
 - [Documentatie API](#documentatie-api)
 - [Testare](#testare)
