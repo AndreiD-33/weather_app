@@ -44,7 +44,7 @@ function HourCard({ hour, timezone, isNow }) {
 
   return (
     <div
-      className={`flex flex-col items-center gap-1.5 p-3 rounded-xl min-w-[70px] transition-all
+      className={`flex flex-col items-center gap-1.5 p-3 rounded-xl min-w-17.5 transition-all
         ${isNow
           ? "bg-sky-500/20 border border-sky-500/40"
           : "bg-slate-800/50 hover:bg-slate-700/50"

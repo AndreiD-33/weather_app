@@ -101,7 +101,7 @@ export default function CurrentWeather({ weather, airQuality, onAddFavorite, isF
           {/* Banner interpretare zi (haina/umbrela) */}
           <div className="rounded-2xl p-4 mb-4 flex items-start gap-3"
             style={{ background: "rgba(14, 165, 233, 0.1)", border: "1px solid rgba(14, 165, 233, 0.2)" }}>
-            <span className="text-3xl flex-shrink-0">{dayInterpretation.emoji}</span>
+            <span className="text-3xl shrink-0">{dayInterpretation.emoji}</span>
             <div>
               <p className="text-sky-200 font-semibold text-sm">{dayInterpretation.message}</p>
               <p className="text-slate-400 text-xs mt-0.5">{dayInterpretation.suggestion}</p>
