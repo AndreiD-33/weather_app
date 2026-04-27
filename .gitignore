@@ -1,0 +1,30 @@
+# Dependente Node
+node_modules/
+package-lock.json
+
+# Fisiere de configurare cu date sensibile
+.env
+.env.local
+
+# Imagini generate automat (similar cu citate-autori lab 7)
+backend/images/*.jpg
+backend/images/*.png
+backend/images/*.jpeg
+backend/images/*.webp
+
+# Directoare build
+dist/
+build/
+coverage/
+
+# Fisiere de sistem
+.DS_Store
+Thumbs.db
+
+# Fisiere log
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/
+.idea/

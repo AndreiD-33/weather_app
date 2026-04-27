@@ -1,0 +1,86 @@
+{
+  "searches": [
+    {
+      "id": "1",
+      "city": "Iași",
+      "country": "RO",
+      "lat": 47.1585,
+      "lon": 27.6014,
+      "timestamp": "2026-04-15T10:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "city": "București",
+      "country": "RO",
+      "lat": 44.4268,
+      "lon": 26.1025,
+      "timestamp": "2026-04-15T09:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "city": "Cluj-Napoca",
+      "country": "RO",
+      "lat": 46.7712,
+      "lon": 23.6236,
+      "timestamp": "2026-04-14T15:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "city": "Paris",
+      "country": "FR",
+      "lat": 48.8588897,
+      "lon": 2.3200410217200766,
+      "timestamp": "2026-04-23T15:10:13.060Z"
+    },
+    {
+      "id": "5",
+      "city": "Locatie curenta",
+      "country": "",
+      "lat": 47.17746083830197,
+      "lon": 27.572663530444785,
+      "timestamp": "2026-04-23T15:12:50.290Z"
+    },
+    {
+      "id": "6",
+      "city": "Botoșani",
+      "country": "RO",
+      "lat": 47.7450706,
+      "lon": 26.6599858,
+      "timestamp": "2026-04-27T06:57:24.473Z"
+    },
+    {
+      "id": "7",
+      "city": "New York",
+      "country": "US",
+      "lat": 40.7127281,
+      "lon": -74.0060152,
+      "timestamp": "2026-04-27T13:14:42.524Z"
+    },
+    {
+      "id": "8",
+      "city": "Moscova",
+      "country": "RU",
+      "lat": 55.7504461,
+      "lon": 37.6174943,
+      "timestamp": "2026-04-27T13:14:59.433Z"
+    }
+  ],
+  "favorites": [
+    {
+      "id": "1",
+      "city": "Iași",
+      "country": "RO",
+      "lat": 47.1585,
+      "lon": 27.6014,
+      "addedAt": "2026-04-15T10:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "city": "Botoșani",
+      "country": "RO",
+      "lat": 47.7451,
+      "lon": 26.66,
+      "addedAt": "2026-04-27T13:15:27.375Z"
+    }
+  ]
+}
