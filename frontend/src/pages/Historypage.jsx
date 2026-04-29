@@ -85,7 +85,7 @@ export default function HistoryPage() {
   return (
     <div className="min-h-screen">
       {/* Header pagina */}
-      <section className="py-8 px-4 border-b border-slate-800">
+      <section className="py-8 px-4 border-b border-red-800">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div>
             <h1
