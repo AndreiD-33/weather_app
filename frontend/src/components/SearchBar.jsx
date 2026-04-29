@@ -67,7 +67,7 @@ export default function SearchBar({ onSearch, onGeolocate, loading }) {
         alert("Nu s-a putut accesa locatia. Verifica permisiunile browserului.");
         setGeoLoading(false);
       },
-      { timeout: 1000 }
+      { timeout: 4000 }
     );
   }
 
