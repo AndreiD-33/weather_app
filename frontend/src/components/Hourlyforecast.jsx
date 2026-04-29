@@ -27,7 +27,7 @@ export default function HourlyForecast({ hourly, timezone }) {
       {/* Slider orizontal cu scroll */}
       <div className="overflow-x-auto pb-2 -mx-1">
         <div className="flex gap-3 px-1 min-w-max">
-          {hourly.map((h, i) => (
+          {hourly.slice(0, 4).map((h, i) => (
             <HourCard key={i} hour={h} timezone={timezone} isNow={i === 0} />
           ))}
         </div>
