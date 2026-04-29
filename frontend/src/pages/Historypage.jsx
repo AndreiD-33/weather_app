@@ -100,7 +100,7 @@ export default function HistoryPage() {
           </div>
           <Link
             to="/"
-            className="px-4 py-2 text-sm font-medium text-sky-400 border border-sky-500/30 rounded-xl hover:bg-sky-500/10 transition-colors"
+            className="px-4 py-2 text-sm font-medium text-sky-400 border border-red-500/30 rounded-xl hover:bg-sky-500/10 transition-colors"
           >
             ← Inapoi la vreme
           </Link>
